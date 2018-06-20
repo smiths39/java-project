@@ -1,4 +1,5 @@
-me="Rectangle-Test" default="main" basedir=".">
+<?xml version="1.0"?>
+<project name="Rectangle-Test" default="main" basedir=".">
   <property environment="env"/>
 
   <property name="src.dir" location="src" />
