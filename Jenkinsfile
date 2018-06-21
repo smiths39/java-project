@@ -95,7 +95,7 @@ pipeline {
 
 				echo "Checking Out Development Branch"
 				sh 'git checkout development'
-
+8
 				echo "Checking out the Master Branch"
 				sh 'git pull origin'
 				sh 'git checkout master'
@@ -111,6 +111,28 @@ pipeline {
 
 				sh "git push origin rectangle-${env.MAJOR_VERSION}.${env.BUILD_NUMBER}"
 			}	
+			
+			post {
+                	        success {
+ 	                               emailext(
+        	                                subject: "${env.JOB_NAME} [${env.BUILD_NUMBER}] Development Promoted to Master",
+                        	                body: """<p>'${env.JOB_NAME} [${env.BUILD_NUMBER}]' Development Promoted to Master":</p>
+                                	                 <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                                      	  	to: "sean.smith39@mail.dcu.ie"
+                                	)
+                        	}
+                	}
+		}
+
+		post {
+			failure {
+				emailext(
+					subject: "${env.JOB_NAME} [${env.BUILD_NUMBER}] Failed!",
+					body: """<p>'${env.JOB_NAME} [${env.BUILD_NUMBER}]' Failed!":</p>
+						 <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+					to: "sean.smith39@mail.dcu.ie"
+				)
+			}
 		}
 	}
 }
